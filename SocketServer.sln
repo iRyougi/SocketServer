@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.34931.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketServer", "SocketServer\SocketServer.vcxproj", "{AD179EA7-C726-4037-8C5F-C015FCFC4A44}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketClient", "SocketClient\SocketClient.vcxproj", "{A79F90E0-FCFA-4964-82BB-F86DF3EE0CC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{AD179EA7-C726-4037-8C5F-C015FCFC4A44}.Release|x64.Build.0 = Release|x64
 		{AD179EA7-C726-4037-8C5F-C015FCFC4A44}.Release|x86.ActiveCfg = Release|Win32
 		{AD179EA7-C726-4037-8C5F-C015FCFC4A44}.Release|x86.Build.0 = Release|Win32
+		{A79F90E0-FCFA-4964-82BB-F86DF3EE0CC1}.Debug|x64.ActiveCfg = Debug|x64
+		{A79F90E0-FCFA-4964-82BB-F86DF3EE0CC1}.Debug|x64.Build.0 = Debug|x64
+		{A79F90E0-FCFA-4964-82BB-F86DF3EE0CC1}.Debug|x86.ActiveCfg = Debug|Win32
+		{A79F90E0-FCFA-4964-82BB-F86DF3EE0CC1}.Debug|x86.Build.0 = Debug|Win32
+		{A79F90E0-FCFA-4964-82BB-F86DF3EE0CC1}.Release|x64.ActiveCfg = Release|x64
+		{A79F90E0-FCFA-4964-82BB-F86DF3EE0CC1}.Release|x64.Build.0 = Release|x64
+		{A79F90E0-FCFA-4964-82BB-F86DF3EE0CC1}.Release|x86.ActiveCfg = Release|Win32
+		{A79F90E0-FCFA-4964-82BB-F86DF3EE0CC1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
