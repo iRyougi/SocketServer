@@ -18,8 +18,5 @@
     <ClCompile Include="SocketClient.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Downloads\sample_program\sample_program\Client.cpp">
-      <Filter>资源文件</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

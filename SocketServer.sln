@@ -7,6 +7,19 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketServer", "SocketServe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketClient", "SocketClient\SocketClient.vcxproj", "{A79F90E0-FCFA-4964-82BB-F86DF3EE0CC1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CC2ADB66-9F11-4EA0-8428-2CA6A1726281}"
+	ProjectSection(SolutionItems) = preProject
+		source\Assignment2_2024(翻译结果).pdf = source\Assignment2_2024(翻译结果).pdf
+		source\Assignment2_2024.pdf = source\Assignment2_2024.pdf
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{24BB76AF-7F9F-40D8-995C-E529C253FC22}"
+	ProjectSection(SolutionItems) = preProject
+		source\sample_program\Client.cpp = source\sample_program\Client.cpp
+		source\sample_program\Server.cpp = source\sample_program\Server.cpp
+		source\sample_program\source_code_complilation.pdf = source\sample_program\source_code_complilation.pdf
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +47,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{24BB76AF-7F9F-40D8-995C-E529C253FC22} = {CC2ADB66-9F11-4EA0-8428-2CA6A1726281}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77AB6E1D-CABC-4559-BEFA-EF8B3B668CA9}
