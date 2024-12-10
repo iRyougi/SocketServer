@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include <filesystem> // C++17
+#include <algorithm>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -15,6 +16,8 @@ std::string getContentType(const std::string& path) {
     if (dotPos == std::string::npos) return "application/octet-stream";
 
     std::string ext = path.substr(dotPos);
+    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
     if (ext == ".html" || ext == ".htm") return "text/html";
     else if (ext == ".css") return "text/css";
     else if (ext == ".js") return "application/javascript";
@@ -48,6 +51,25 @@ int getContentLength(const std::string& request) {
         }
     }
     return contentLength;
+}
+
+// 从请求头中获取自定义头X-Filename的内容，用于获取文件名
+std::string getFilenameFromHeader(const std::string& request) {
+    std::string filename;
+    // 简单查找 "X-Filename:" 行
+    size_t pos = request.find("X-Filename:");
+    if (pos != std::string::npos) {
+        size_t start = pos + strlen("X-Filename:");
+        // 跳过空格
+        while (start < request.size() && (request[start] == ' ' || request[start] == '\t')) {
+            start++;
+        }
+        size_t end = request.find("\r\n", start);
+        if (end != std::string::npos) {
+            filename = request.substr(start, end - start);
+        }
+    }
+    return filename;
 }
 
 int main() {
@@ -95,7 +117,7 @@ int main() {
 
     while (true) {
         std::cout << "[DEBUG] Waiting for client connection..." << std::endl;
-        SOCKET clientSocket = accept(serverSocket, NULL, NULL);
+        SOCKET clientSocket = accept(serverSocket, nullptr, nullptr);
         if (clientSocket == INVALID_SOCKET) {
             std::cerr << "[ERROR] Accept failed with error: " << WSAGetLastError() << std::endl;
             continue;
@@ -117,6 +139,7 @@ int main() {
         bool isPost = (request.rfind("POST ", 0) == 0);
 
         if (isGet) {
+            // GET请求处理保持不变
             size_t start = request.find("GET ") + 4;
             size_t spacePos = request.find(' ', start);
             if (spacePos == std::string::npos) {
@@ -127,10 +150,8 @@ int main() {
                 continue;
             }
             std::string path = request.substr(start, spacePos - start);
-
             if (path == "/13-knight" || path == "/13-knight/")
                 path = "/13-knight/index.html";
-
             if (!path.empty() && path.front() == '/')
                 path.erase(0, 1);
 
@@ -200,15 +221,45 @@ int main() {
                 if (ret <= 0) {
                     std::cerr << "[ERROR] Connection lost while receiving POST body." << std::endl;
                     closesocket(clientSocket);
-                    // 此处continue无法让外部逻辑执行完整，所以加个break退出循环
                     break;
                 }
                 body.append(tempBuf, ret);
             }
 
             std::cout << "[DEBUG] Received POST body size: " << body.size() << " bytes." << std::endl;
-            
-            std::string uploadPath = "uploads/uploaded_file";
+
+            // 从头中获取文件名
+            std::string filename = getFilenameFromHeader(request);
+            if (filename.empty()) {
+                filename = "uploaded_file"; // 没有提供文件名则使用默认名
+            }
+
+            // 确定文件扩展名对应的类型信息并在终端打印
+            std::string ext;
+            {
+                size_t dotPos = filename.find_last_of('.');
+                if (dotPos != std::string::npos) {
+                    ext = filename.substr(dotPos);
+                    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+                }
+            }
+
+            // 打印文件类型信息
+            std::string contentType = getContentType(filename);
+            if (contentType.find("text/html") != std::string::npos) {
+                std::cout << "[DEBUG] Uploaded a HTML file." << std::endl;
+            }
+            else if (contentType.find("image/") != std::string::npos) {
+                std::cout << "[DEBUG] Uploaded an Image file." << std::endl;
+            }
+            else if (contentType.find("video/") != std::string::npos) {
+                std::cout << "[DEBUG] Uploaded a Video file." << std::endl;
+            }
+            else {
+                std::cout << "[DEBUG] Uploaded a generic file." << std::endl;
+            }
+
+            std::string uploadPath = "uploads/" + filename;
             {
                 std::ofstream outFile(uploadPath, std::ios::binary);
                 if (!outFile.is_open()) {
@@ -227,10 +278,8 @@ int main() {
                 "Content-Length: " + std::to_string(jsonResponse.size()) + "\r\n"
                 "\r\n";
 
-            int headerSent = send(clientSocket, responseHeader.c_str(), (int)responseHeader.size(), 0);
-            int bodySent = send(clientSocket, jsonResponse.c_str(), (int)jsonResponse.size(), 0);
-
-            std::cout << "[DEBUG] JSON headerSent: " << headerSent << ", bodySent: " << bodySent << std::endl;
+            send(clientSocket, responseHeader.c_str(), (int)responseHeader.size(), 0);
+            send(clientSocket, jsonResponse.c_str(), (int)jsonResponse.size(), 0);
 
             closesocket(clientSocket);
             std::cout << "[DEBUG] Client connection closed. Uploaded file saved as " << uploadPath << std::endl;
