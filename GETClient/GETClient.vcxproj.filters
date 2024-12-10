@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SocketClient.cpp">
+    <ClCompile Include="GETClient.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
